@@ -111,7 +111,7 @@ export default function Dashboard() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-white tracking-tight">Dashboard</h1>
-            <p className="text-slate-400 mt-1">Here's what's happening with your projects.</p>
+            <p className="text-slate-400 mt-1">Keep track of your tasks and manage your projects.</p>
           </div>
           
           <button 

@@ -62,7 +62,7 @@ export default function Register() {
                   value={name}
                   onChange={(e)=>setName(e.target.value)}
                   className="input-field pl-10" 
-                  placeholder="John Doe"
+                  placeholder="Enter your name"
                 />
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function Register() {
                   value={email}
                   onChange={(e)=>setEmail(e.target.value)}
                   className="input-field pl-10" 
-                  placeholder="you@example.com"
+                  placeholder="Enter your email"
                 />
               </div>
             </div>
@@ -94,7 +94,7 @@ export default function Register() {
                   value={password}
                   onChange={(e)=>setPassword(e.target.value)}
                   className="input-field pl-10" 
-                  placeholder="••••••••"
+                  placeholder="Enter your password"
                 />
               </div>
             </div>
