@@ -80,10 +80,11 @@ const getTaskStats = async (req, res) => {
   try {
     const tasks = await Task.find({ user: req.user.id });
     const total = tasks.length;
-    const completed = tasks.filter(t => t.status === 'Completed').length;
-    const pending = total - completed;
+    const todo = tasks.filter(t => t.status === 'Todo').length;
+    const inProgress = tasks.filter(t => t.status === 'In Progress').length;
+    const done = tasks.filter(t => t.status === 'Done').length;
 
-    res.status(200).json({ total, completed, pending });
+    res.status(200).json({ total, todo, inProgress, done });
   } catch (error) {
     res.status(500).json({ message: 'Server Error' });
   }

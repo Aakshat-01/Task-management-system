@@ -1,7 +1,7 @@
 import { Calendar, AlertCircle, CheckCircle, Trash2, Edit2 } from 'lucide-react';
 
 export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }) {
-  const isOverdue = new Date(task.deadline) < new Date() && task.status !== 'Completed';
+  const isOverdue = task.deadline && new Date(task.deadline) < new Date() && task.status !== 'Done';
 
   const priorityColors = {
     Low: 'bg-slate-500/10 text-slate-400 border-slate-500/20',
@@ -9,10 +9,16 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }) {
     High: 'bg-danger/10 text-danger border-danger/20'
   };
 
+  const statusStyles = {
+    'Todo': 'bg-slate-800 text-slate-300 border-slate-700',
+    'In Progress': 'bg-warning/10 text-warning border-warning/20',
+    'Done': 'bg-success/10 text-success border-success/20'
+  };
+
   return (
     <div className={`card transition-all hover:-translate-y-1 ${isOverdue ? 'border-danger/50 shadow-danger/10' : ''}`}>
       <div className="flex justify-between items-start mb-4">
-        <h3 className={`font-semibold text-lg ${task.status === 'Completed' ? 'line-through text-slate-500' : 'text-slate-100'}`}>
+        <h3 className={`font-semibold text-lg ${task.status === 'Done' ? 'line-through text-slate-500' : 'text-slate-100'}`}>
           {task.title}
         </h3>
         <div className="flex gap-2">
@@ -53,17 +59,19 @@ export default function TaskCard({ task, onUpdateStatus, onDelete, onEdit }) {
           Created {new Date(task.createdAt).toLocaleDateString()}
         </span>
         
-        <button
-          onClick={() => onUpdateStatus(task._id, task.status === 'Pending' ? 'Completed' : 'Pending')}
-          className={`text-sm font-medium flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-colors ${
-            task.status === 'Completed' 
-              ? 'text-success bg-success/10 hover:bg-success/20' 
-              : 'text-slate-300 bg-slate-800 hover:bg-slate-700'
-          }`}
-        >
-          <CheckCircle className={`w-4 h-4 ${task.status === 'Completed' ? 'fill-success/20' : ''}`} />
-          {task.status === 'Completed' ? 'Completed' : 'Mark Complete'}
-        </button>
+        <div className="flex items-center gap-1.5">
+          <select
+            value={task.status}
+            onChange={(e) => onUpdateStatus(task._id, e.target.value)}
+            className={`text-xs font-semibold px-2.5 py-1.5 rounded-lg border focus:outline-none transition-colors cursor-pointer ${
+              statusStyles[task.status] || statusStyles.Todo
+            }`}
+          >
+            <option value="Todo" className="bg-slate-900 text-white">To Do</option>
+            <option value="In Progress" className="bg-slate-900 text-white">In Progress</option>
+            <option value="Done" className="bg-slate-900 text-white">Done</option>
+          </select>
+        </div>
       </div>
     </div>
   );

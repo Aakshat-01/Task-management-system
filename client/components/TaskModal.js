@@ -5,6 +5,7 @@ export default function TaskModal({ isOpen, onClose, onSubmit, task = null, isLo
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('Medium');
+  const [status, setStatus] = useState('Todo');
   const [deadline, setDeadline] = useState('');
 
   useEffect(() => {
@@ -12,11 +13,13 @@ export default function TaskModal({ isOpen, onClose, onSubmit, task = null, isLo
       setTitle(task.title);
       setDescription(task.description || '');
       setPriority(task.priority || 'Medium');
+      setStatus(task.status || 'Todo');
       setDeadline(task.deadline ? new Date(task.deadline).toISOString().split('T')[0] : '');
     } else {
       setTitle('');
       setDescription('');
       setPriority('Medium');
+      setStatus('Todo');
       setDeadline('');
     }
   }, [task, isOpen]);
@@ -29,6 +32,7 @@ export default function TaskModal({ isOpen, onClose, onSubmit, task = null, isLo
       title, 
       description, 
       priority, 
+      status,
       deadline: deadline ? new Date(deadline).toISOString() : null 
     });
   };
@@ -68,7 +72,7 @@ export default function TaskModal({ isOpen, onClose, onSubmit, task = null, isLo
             />
           </div>
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">Priority</label>
               <select 
@@ -79,6 +83,19 @@ export default function TaskModal({ isOpen, onClose, onSubmit, task = null, isLo
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">Status</label>
+              <select 
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+                className="input-field appearance-none"
+              >
+                <option value="Todo">To Do</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Done">Done</option>
               </select>
             </div>
             

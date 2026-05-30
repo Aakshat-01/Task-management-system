@@ -6,11 +6,11 @@ import toast from 'react-hot-toast';
 import Navbar from '../../components/Navbar';
 import TaskCard from '../../components/TaskCard';
 import TaskModal from '../../components/TaskModal';
-import { Plus, ListTodo, CheckCircle2, Clock } from 'lucide-react';
+import { Plus, ListTodo, CheckCircle2, Clock, ClipboardList } from 'lucide-react';
 
 export default function Dashboard() {
   const [tasks, setTasks] = useState([]);
-  const [stats, setStats] = useState({ total: 0, completed: 0, pending: 0 });
+  const [stats, setStats] = useState({ total: 0, todo: 0, inProgress: 0, done: 0 });
   const [filter, setFilter] = useState('All');
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
@@ -90,8 +90,7 @@ export default function Dashboard() {
 
   const filteredTasks = tasks.filter(task => {
     if (filter === 'All') return true;
-    if (filter === 'Completed') return task.status === 'Completed';
-    if (filter === 'Pending') return task.status === 'Pending';
+    if (['Todo', 'In Progress', 'Done'].includes(filter)) return task.status === filter;
     return task.priority === filter;
   });
 
@@ -124,7 +123,7 @@ export default function Dashboard() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           <div className="card bg-gradient-to-br from-surface to-surface/50 border-slate-800">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
@@ -136,6 +135,18 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
+
+          <div className="card bg-gradient-to-br from-surface to-surface/50 border-slate-800">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-xl bg-slate-500/10 flex items-center justify-center text-slate-400">
+                <ClipboardList className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-slate-400">To Do</p>
+                <p className="text-3xl font-bold text-white mt-1">{stats.todo || 0}</p>
+              </div>
+            </div>
+          </div>
           
           <div className="card bg-gradient-to-br from-surface to-surface/50 border-slate-800">
             <div className="flex items-center gap-4">
@@ -144,7 +155,7 @@ export default function Dashboard() {
               </div>
               <div>
                 <p className="text-sm font-medium text-slate-400">In Progress</p>
-                <p className="text-3xl font-bold text-white mt-1">{stats.pending}</p>
+                <p className="text-3xl font-bold text-white mt-1">{stats.inProgress || 0}</p>
               </div>
             </div>
           </div>
@@ -155,8 +166,8 @@ export default function Dashboard() {
                 <CheckCircle2 className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-sm font-medium text-slate-400">Completed</p>
-                <p className="text-3xl font-bold text-white mt-1">{stats.completed}</p>
+                <p className="text-sm font-medium text-slate-400">Done</p>
+                <p className="text-3xl font-bold text-white mt-1">{stats.done || 0}</p>
               </div>
             </div>
           </div>
@@ -164,7 +175,7 @@ export default function Dashboard() {
 
         {/* Filters */}
         <div className="flex overflow-x-auto pb-4 gap-2 mb-6 scrollbar-hide">
-          {['All', 'Pending', 'Completed', 'High', 'Medium', 'Low'].map(f => (
+          {['All', 'Todo', 'In Progress', 'Done', 'High', 'Medium', 'Low'].map(f => (
             <button
               key={f}
               onClick={() => setFilter(f)}
